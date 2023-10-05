@@ -20,3 +20,6 @@ ln -s /usr/share/dict/words /root/words
 
 Change the owner of the file /etc/ntp.conf to operator 
 sudo chown operator /etc/ntp.conf 
+
+Change the SELinux type
+chcon -t [TYPE] [file/folder path]
