@@ -26,3 +26,6 @@ chcon -t [TYPE] [file/folder path]
 
 get the default SELinux security context for the specified path from the file contexts configuration
 matchpathcon [FILEPATH]
+
+Search for allow rules that are affected by a specific Boolean
+sesearch --allow --bool [BOOLEAN_NAME]
