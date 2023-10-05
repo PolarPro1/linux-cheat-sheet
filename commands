@@ -23,3 +23,6 @@ sudo chown operator /etc/ntp.conf
 
 Change the SELinux type
 chcon -t [TYPE] [file/folder path]
+
+get the default SELinux security context for the specified path from the file contexts configuration
+matchpathcon [FILEPATH]
