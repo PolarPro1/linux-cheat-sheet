@@ -3,4 +3,4 @@ cat - display contents
 ls - list contents
 cd - change directory
 wc - wordcount use -l for line count
-which (insert name of syslog damon) - to get absolute path name
+which (insert name of syslog daemon) - to get absolute path name
