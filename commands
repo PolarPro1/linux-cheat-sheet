@@ -29,3 +29,7 @@ matchpathcon [FILEPATH]
 
 Search for allow rules that are affected by a specific Boolean
 sesearch --allow --bool [BOOLEAN_NAME]
+
+The syslog daemon you investigated is allowed to open a number of ports, both tcp and udp. Use the sesearch on the syslogd_t type, focusing on tcp sockets and the name_bind permission. Include the -C to better understand conditional rules.
+You should ignore rules where the line begins with DT or DF. This indicates the conditional rule is currently disabled.
+sesearch -s syslogd_t -c tcp_socket -AC -p name_bind | grep -vE "^(DT|DF)"
