@@ -1,7 +1,22 @@
+Commands
 pwd - used to find absolute path
 cat - display contents
 ls - list contents
+  -Z finds se linux labels for files/directories
 cd - change directory
-wc - wordcount use -l for line count
+wc - wordcount
+  -l for line count
 which (insert name of syslog daemon) - to get absolute path name
-grep -g -liZ -zy    (goes and gets glizzy)
+
+
+
+Example Questions 
+
+Gives the name of the first directory (alphabetically) of / that has no read permission for other.
+find / -maxdepth 1 -type d -not -perm /o=r -print | sort | head -n 1 
+
+Create a symbolic link so that the file /usr/share/dict/words appears as /root/words
+ln -s /usr/share/dict/words /root/words 
+
+Change the owner of the file /etc/ntp.conf to operator 
+sudo chown operator /etc/ntp.conf 
