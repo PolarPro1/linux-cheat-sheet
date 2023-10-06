@@ -50,3 +50,8 @@ iptables -I INPUT -p icmp --icmp-type echo-request -j DROP
 inserts a new rule at the beginning of the INPUT chain that accepts incoming ICMP echo requests (PING) at a rate limit of 1 PING per second. This means that any PING that matches the criteria specified in the rule will be accepted, as long as it does not exceed the rate limit
 iptables -I INPUT -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT
 
+log incoming pings that are faster than 1 per second
+iptables -I INPUT 2 -p icmp --icmp-type echo-request -m limit --limit 1/second -j LOG --log-prefix "Ping log: "
+
+To insert a single rule at the start of the INPUT chain that only allows telnet connections from 10.200.0.1 and rejects any other telnet connections, you can use the following command:
+iptables -I INPUT -p tcp --dport telnet ! -s 10.200.0.1 -j REJECT
