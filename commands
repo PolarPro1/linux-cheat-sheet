@@ -40,3 +40,13 @@ iptables -A INPUT -i <main_interface> -p tcp --dport 80 -j DROP
 
 adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets from the source IP address range 20.0.0.0/24 that arrive on the main network device specified by <main_interface>
 iptables -A INPUT -i <main_interface> -s 20.0.0.0/24 -p tcp -j DROP
+
+any packet that is passed through the FORWARD chain will be rejected with the default settings
+iptables -A FORWARD -j REJECT
+
+inserts a new rule at the beginning of the INPUT chain that drops (rejects) any incoming ICMP echo requests (PING). This means that any PING that matches the criteria specified in the rule will be dropped (rejected)
+iptables -I INPUT -p icmp --icmp-type echo-request -j DROP
+
+inserts a new rule at the beginning of the INPUT chain that accepts incoming ICMP echo requests (PING) at a rate limit of 1 PING per second. This means that any PING that matches the criteria specified in the rule will be accepted, as long as it does not exceed the rate limit
+iptables -I INPUT -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT
+
