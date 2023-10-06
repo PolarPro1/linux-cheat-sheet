@@ -33,3 +33,10 @@ sesearch --allow --bool [BOOLEAN_NAME]
 The syslog daemon you investigated is allowed to open a number of ports, both tcp and udp. Use the sesearch on the syslogd_t type, focusing on tcp sockets and the name_bind permission. Include the -C to better understand conditional rules.
 You should ignore rules where the line begins with DT or DF. This indicates the conditional rule is currently disabled.
 sesearch -s syslogd_t -c tcp_socket -AC -p name_bind | grep -vE "^(DT|DF)"
+
+***FIREWALL LINUXZOO LAB***
+adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets on port 80 (HTTP) that arrive on the <main_interface> network interface.
+iptables -A INPUT -i <main_interface> -p tcp --dport 80 -j DROP
+
+adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets from the source IP address range 20.0.0.0/24 that arrive on the main network device specified by <main_interface>
+iptables -A INPUT -i <main_interface> -s 20.0.0.0/24 -p tcp -j DROP
