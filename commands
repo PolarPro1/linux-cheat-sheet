@@ -58,3 +58,12 @@ iptables -I INPUT -p tcp --dport telnet ! -s 10.200.0.1 -j REJECT
 
 To insert a single rule at the end of the OUTPUT chain that allows http connections to the ip 10.200.0.1
 iptables -A OUTPUT -m conntrack --ctstate NEW -p tcp --dport http -d 10.200.0.1 -j ACCEPT 
+
+if the machine was a router, to allow the RELATED and ESTABLISHED traffic flow in both directions
+iptables -A FORWARD -m conntrack --ctstate NEW -p tcp --dport http -d <destination ip> -j ACCEPT
+
+still for a router, to allow HTTP requests to an intranet/network
+iptables -A FORWARD -o <interface> -m conntrack --ctstate NEW -p tcp --dport http -d <network/destination ip> -j ACCEPT
+
+again for the router, to allow all PING requests to an intranet/network
+iptables -A FORWARD -o <interface> -m conntrack --ctstate NEW -p icmp --icmp-type echo-request -d <network/destination ip> -j ACCEPT
