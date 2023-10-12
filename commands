@@ -55,3 +55,6 @@ iptables -I INPUT 2 -p icmp --icmp-type echo-request -m limit --limit 1/second -
 
 To insert a single rule at the start of the INPUT chain that only allows telnet connections from 10.200.0.1 and rejects any other telnet connections, you can use the following command:
 iptables -I INPUT -p tcp --dport telnet ! -s 10.200.0.1 -j REJECT
+
+To insert a single rule at the end of the OUTPUT chain that allows http connections to the ip 10.200.0.1
+iptables -A OUTPUT -m conntrack --ctstate NEW -p tcp --dport http -d 10.200.0.1 -j ACCEPT 
