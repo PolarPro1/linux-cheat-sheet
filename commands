@@ -60,7 +60,7 @@ To insert a single rule at the end of the OUTPUT chain that allows http connecti
 iptables -A OUTPUT -m conntrack --ctstate NEW -p tcp --dport http -d 10.200.0.1 -j ACCEPT 
 
 if the machine was a router, to allow the RELATED and ESTABLISHED traffic flow in both directions
-iptables -A FORWARD -m conntrack --ctstate NEW -p tcp --dport http -d <destination ip> -j ACCEPT
+iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 still for a router, to allow HTTP requests to an intranet/network
 iptables -A FORWARD -o <interface> -m conntrack --ctstate NEW -p tcp --dport http -d <network/destination ip> -j ACCEPT
