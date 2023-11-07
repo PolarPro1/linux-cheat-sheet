@@ -35,6 +35,63 @@ You should ignore rules where the line begins with DT or DF. This indicates the 
 # sesearch -s syslogd_t -c tcp_socket -AC -p name_bind | grep -vE "^(DT|DF)"
 
 ***FIREWALL LINUXZOO LAB***
+
+basic firewall settings that limit and log pings to 1 a second. port 80 is also closed
+#!/bin/bash
+#
+iptables -F INPUT
+iptables -F OUTPUT
+iptables -F FORWARD
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD DROP
+#
+# Accept ongoing connections
+iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-request -j LOG --log-prefix " ICMP PING Exceeded REate: " --log-level 4
+iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+#
+# For your own safety, stop users logging in from other VMs
+#
+iptables -A INPUT -m conntrack --ctstate NEW -p tcp --dport 22 ! -s 10.0.0.0/16 -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate NEW -p tcp --dport 23 ! -s 10.0.0.0/16 -j ACCEPT
+iptables -A INPUT -i ens3 -p tcp --dport 80 -j DROP
+iptables -A INPUT -i ens3 -p tcp -s 20.0.0.0/24 -j DROP
+iptables -A FORWARD -j REJECT
+
+Advanced firewall setting complete
+#!/bin/bash
+#
+iptables -F INPUT
+iptables -F OUTPUT
+iptables -F FORWARD
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+#
+#
+iptables -A INPUT  -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+#
+# --- Put a rule here if you want to be inserting at the start of INPUT
+iptables -I INPUT -p tcp --dport telnet ! -s 10.200.0.1 -j REJECT
+# ---
+#
+# Make sure ssh and telnet stay working, and that users on
+# other VMs cannot log in.
+#
+iptables -A INPUT -m conntrack --ctstate NEW -p tcp --dport ssh ! -s 10.0.0.0/16 -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate NEW -p tcp --dport telnet ! -s 10.0.0.0/16 -j ACCEPT
+iptables -A OUTPUT -m conntrack --ctstate NEW -p tcp --dport http -d 10.200.0.1 -j ACCEPT
+
+iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -o eth9 -m conntrack --ctstate NEW -p tcp --dport http -d 192.168.1.5 -j ACCEPT
+iptables -A FORWARD -o eth9 -m conntrack --ctstate NEW -p icmp --icmp-type echo-request -d 192.168.1.5 -j ACCEPT
+
+
+rules with descriptions
+
 Adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets on port 80 (HTTP) that arrive on the <main_interface> network interface.
 # iptables -A INPUT -i <main_interface> -p tcp --dport 80 -j DROP
 
@@ -89,4 +146,50 @@ Creating a forwward zone for the sillynet.net
 Chnging the ownership of the file to 'named'
 # chown named:named sillynet.zone
 
+example forward zone
+$TTL 3D
+@       IN SOA  advanced.com me.advanced.com. (     ** primary nameserver and email **
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
 
+                                        IN NS ns1.advanced.com.  ** name sever record **
+
+advanced.com. IN A 172.16.1.1                ** maps hostname to ip address **
+              IN MX 10 mail.advanced.com.    ** mail exchange record with priority 10 **
+              IN MX 20 mail.offsite.com.     ** mail exchange record priority 20 so if first email server is unreachable **
+www.advanced.com. IN A 172.16.1.10           ** multiple Ip address for load balancing
+                  IN A 172.16.1.11
+                  IN A 172.16.1.12
+mail.advanced.com. IN A 172.16.1.1           
+ns1.advanced.com. IN A 172.16.1.1
+
+examle reverse zone
+
+$TTL 3D
+@   IN  SOA     advanced.com. me.advanced.com. (      ** advanced.com is primary name server and me.advnaced.com is the email **
+        0           ; Serial
+        8H          ; Refresh
+        2H          ; Retry
+        4W          ; Expire
+        1D)         ; Minimum TTL
+
+        IN  NS  ns1.advanced.com.    ** name server record
+
+1   IN  PTR     advanced.com.
+10  IN  PTR     www.advanced.com.
+11  IN  PTR     www.advanced.com.
+12  IN  PTR     www.advanced.com.
+
+Example etc/named.conf file
+
+zone "advanced.com" IN {
+        type master;
+        file "/var/named/advanced.zone";
+};
+zone "1.16.172.in-addr.arpa" IN {
+        type master;
+        file "/var/named/advanced.rev";
+};
