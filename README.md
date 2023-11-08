@@ -261,6 +261,8 @@ zone "1.16.172.in-addr.arpa" IN {
 OR
 <br>
 ```mount -l | grep 'centos_lvm-root'```
+###example (answer is / )
+```/dev/mapper/centos_lvm-root on / type xfs (rw,relatime,seclabel,attr2,inode64,noquota)```
 
 #### To find the block id for the mapper filesystem
 ```blkid /dev/mapper/centos_lvm-root```
