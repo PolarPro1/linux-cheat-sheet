@@ -9,9 +9,7 @@
 -  ```-Z``` finds selinux labels for files/directories
 
 ```cd``` - change directory
-
 <br>
-
 ```wc``` - wordcount
 - ```-l``` for line count
 
