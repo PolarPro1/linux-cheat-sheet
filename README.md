@@ -130,7 +130,9 @@ iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -o eth9 -m conntrack --ctstate NEW -p tcp --dport http -d 192.168.1.5 -j ACCEPT
 iptables -A FORWARD -o eth9 -m conntrack --ctstate NEW -p icmp --icmp-type echo-request -d 192.168.1.5 -j ACCEPT
 ```
-rules with descriptions
+
+
+## Rules with descriptions
 
 ### Adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets on port 80 (HTTP) that arrive on the <main_interface> network interface.
 ```iptables -A INPUT -i <main_interface> -p tcp --dport 80 -j DROP```
