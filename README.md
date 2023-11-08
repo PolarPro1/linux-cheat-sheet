@@ -9,7 +9,9 @@
 -  ```-Z``` finds selinux labels for files/directories
 
 ```cd``` - change directory
+
 <br>
+
 ```wc``` - wordcount
 - ```-l``` for line count
 
@@ -51,32 +53,32 @@
 
 ## Example Questions 
 
-### Gives the name of the first directory (alphabetically) of / that has no read permission for other.
+#### Gives the name of the first directory (alphabetically) of / that has no read permission for other.
 ```find / -maxdepth 1 -type d -not -perm /o=r -print | sort | head -n 1```
 
-### Create a symbolic link so that the file /usr/share/dict/words appears as /root/words
+#### Create a symbolic link so that the file /usr/share/dict/words appears as /root/words
 ```ln -s /usr/share/dict/words /root/words```
 
-### Change the owner of the file /etc/ntp.conf to operator 
+#### Change the owner of the file /etc/ntp.conf to operator 
 ```sudo chown operator /etc/ntp.conf```
 
-### Change the SELinux type
+#### Change the SELinux type
 ```chcon -t [TYPE] [file/folder path]```
 
-### Get the default SELinux security context for the specified path from the file contexts configuration
+#### Get the default SELinux security context for the specified path from the file contexts configuration
 ```matchpathcon [FILEPATH]```
 
-### Search for allow rules that are affected by a specific Boolean
+#### Search for allow rules that are affected by a specific Boolean
 ```sesearch --allow --bool [BOOLEAN_NAME]```
 
-### The syslog daemon you investigated is allowed to open a number of ports, both tcp and udp. Use the sesearch on the syslogd_t type, focusing on tcp sockets and the name_bind permission. Include the -C to better understand conditional rules.
-### You should ignore rules where the line begins with DT or DF. This indicates the conditional rule is currently disabled.
+#### The syslog daemon you investigated is allowed to open a number of ports, both tcp and udp. Use the sesearch on the syslogd_t type, focusing on tcp sockets and the name_bind permission. Include the -C to better understand conditional rules.
+#### You should ignore rules where the line begins with DT or DF. This indicates the conditional rule is currently disabled.
 ```sesearch -s syslogd_t -c tcp_socket -AC -p name_bind | grep -vE "^(DT|DF)"```
 
 
 # FIREWALL LINUXZOO LAB
 
-### basic firewall settings that limit and log pings to 1 a second. port 80 is also closed
+#### basic firewall settings that limit and log pings to 1 a second. port 80 is also closed
 ```
 #!/bin/bash
 #
@@ -134,64 +136,64 @@ iptables -A FORWARD -o eth9 -m conntrack --ctstate NEW -p icmp --icmp-type echo-
 
 ## Rules with descriptions
 
-### Adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets on port 80 (HTTP) that arrive on the <main_interface> network interface.
+#### Adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets on port 80 (HTTP) that arrive on the <main_interface> network interface.
 ```iptables -A INPUT -i <main_interface> -p tcp --dport 80 -j DROP```
 
-### Adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets from the source IP address range 20.0.0.0/24 that arrive on the main network device specified by <main_interface>
+#### Adds a rule to the iptables firewall that drops (rejects) any incoming TCP packets from the source IP address range 20.0.0.0/24 that arrive on the main network device specified by <main_interface>
 ```iptables -A INPUT -i <main_interface> -s 20.0.0.0/24 -p tcp -j DROP```
 
-### Any packet that is passed through the FORWARD chain will be rejected with the default settings
+#### Any packet that is passed through the FORWARD chain will be rejected with the default settings
 ```iptables -A FORWARD -j REJECT```
 
-### Inserts a new rule at the beginning of the INPUT chain that drops (rejects) any incoming ICMP echo requests (PING). This means that any PING that matches the criteria specified in the rule will be dropped (rejected)
+#### Inserts a new rule at the beginning of the INPUT chain that drops (rejects) any incoming ICMP echo requests (PING). This means that any PING that matches the criteria specified in the rule will be dropped (rejected)
 ```iptables -I INPUT -p icmp --icmp-type echo-request -j DROP```
 
-### Inserts a new rule at the beginning of the INPUT chain that accepts incoming ICMP echo requests (PING) at a rate limit of 1 PING per second. This means that any PING that matches the criteria specified in the rule will be accepted, as long as it does not exceed the rate limit
+#### Inserts a new rule at the beginning of the INPUT chain that accepts incoming ICMP echo requests (PING) at a rate limit of 1 PING per second. This means that any PING that matches the criteria specified in the rule will be accepted, as long as it does not exceed the rate limit
 ```iptables -I INPUT -p icmp --icmp-type echo-request -m limit --limit 1/second -j ACCEPT```
 
-### Log incoming pings that are faster than 1 per second
+#### Log incoming pings that are faster than 1 per second
 ```iptables -I INPUT 2 -p icmp --icmp-type echo-request -m limit --limit 1/second -j LOG --log-prefix "Ping log: "```
 
-### To insert a single rule at the start of the INPUT chain that only allows telnet connections from 10.200.0.1 and rejects any other telnet connections, you can use the following command:
+#### To insert a single rule at the start of the INPUT chain that only allows telnet connections from 10.200.0.1 and rejects any other telnet connections, you can use the following command:
 ```iptables -I INPUT -p tcp --dport telnet ! -s 10.200.0.1 -j REJECT```
 
-### To insert a single rule at the end of the OUTPUT chain that allows http connections to the ip 10.200.0.1
+#### To insert a single rule at the end of the OUTPUT chain that allows http connections to the ip 10.200.0.1
 ```iptables -A OUTPUT -m conntrack --ctstate NEW -p tcp --dport http -d 10.200.0.1 -j ACCEPT```
 
-### If the machine was a router, to allow the RELATED and ESTABLISHED traffic flow in both directions
+#### If the machine was a router, to allow the RELATED and ESTABLISHED traffic flow in both directions
 ```iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT```
 
-### Still for a router, to allow HTTP requests to an intranet/network
+#### Still for a router, to allow HTTP requests to an intranet/network
 ```iptables -A FORWARD -o <interface> -m conntrack --ctstate NEW -p tcp --dport http -d <network/destination ip> -j ACCEPT```
 
-### again for the router, to allow all PING requests to an intranet/network
+#### again for the router, to allow all PING requests to an intranet/network
 ```iptables -A FORWARD -o <interface> -m conntrack --ctstate NEW -p icmp --icmp-type echo-request -d <network/destination ip> -j ACCEPT```
 
 
 # DNS LAB
 
-### Basic setup of the DNS, adding a configuration to the 'named' service
+#### Basic setup of the DNS, adding a configuration to the 'named' service
 ```nano /etc/named.conf```
-### Append to lines in the options part: 
+#### Append to lines in the options part: 
 ```forwarders { 10.200.0.1; };```
 <br>
 ```forward only;```
 
-### Running the service (a restart of the firewall is needed)
+#### Running the service (a restart of the firewall is needed)
 ```systemctl restart iptables```
 <br>
 ```systemctl start named.service```
 
-### Checking if the service and the configurations work:
+#### Checking if the service and the configurations work:
 ```dig +timeout=3 +tries=1 localhost @loalhost```
 
-### Creating a forwward zone for the sillynet.net
+#### Creating a forwward zone for the sillynet.net
 ```cp /var/named/named.localhost /var/named/sillynet.zone```
 
-### Changing the ownership of the file to 'named'
+#### Changing the ownership of the file to 'named'
 ```chown named:named sillynet.zone```
 
-### example forward zone
+#### example forward zone
 ```
 $TTL 3D
 @       IN SOA  advanced.com me.advanced.com. (     ** primary nameserver and email **
@@ -243,79 +245,79 @@ zone "1.16.172.in-addr.arpa" IN {
 
 
 # ADMIN
-### Get the number of partitions using block with 'sfdisk' command from a directory
+#### Get the number of partitions using block with 'sfdisk' command from a directory
 ```sfdisk -l [directory]```
 
-### Finding what physical volume is being managed by the LVM
+#### Finding what physical volume is being managed by the LVM
 ```pvdisplay```
 
-### Using info from previous part to find the full path of the physical volume
+#### Using info from previous part to find the full path of the physical volume
 ```lvdisplay centos_lvm (or [VG Name])```
 
-### Get the absolute device name using the long listing ls command
+#### Get the absolute device name using the long listing ls command
 ```ls -l /dev/centos_lvm (or [directory])```
 
-### Finding where the partition is mounted on the device
+#### Finding where the partition is mounted on the device
 ```cat /etc/fstab```
 <br>
 OR
 <br>
 ```mount -l | grep 'centos_lvm-root'```
 
-### To find the block id for the mapper filesystem
+#### To find the block id for the mapper filesystem
 ```blkid /dev/mapper/centos_lvm-root```
 
-### Find the major and the  minor number of the mapper device (in this case the soft link was used to find the numbers)
+#### Find the major and the  minor number of the mapper device (in this case the soft link was used to find the numbers)
 ```ls -l /dev (look for the soft link associated with the mapper, here it is dm-0)```
 
-### Find how much swap space has been allocated on the computer from the '/proc' directory
+#### Find how much swap space has been allocated on the computer from the '/proc' directory
 ```cat /proc/swaps (the size is in bytes)```
 
-### Find the process id of a process
+#### Find the process id of a process
 ```ps -C [process name]```
 
-### Kill a process (the process id must be used)
+#### Kill a process (the process id must be used)
 ```kill [process id]```
 
-### Find the full path to the systemd config file which controls a service (in this case rsyslog)
+#### Find the full path to the systemd config file which controls a service (in this case rsyslog)
 ```systemctl show [process name] (look for FragmentPath)```
 
-### Find the line that configures the environmental variables of a process (in this case rsyslog)
+#### Find the line that configures the environmental variables of a process (in this case rsyslog)
 ```systemctl show [process name] | grep 'EnvironmentFile'```
 
-### Restart a process
+#### Restart a process
 ```systemctl restart [process name]```
 
-### Start a service/process
+#### Start a service/process
 ```systemctl start [service name]```
 
-### Find the main PID of a service or a process
+#### Find the main PID of a service or a process
 ```systemctl show -p MainPID [service name]```
 
-### Find the user that is the owner of the process/service
+#### Find the user that is the owner of the process/service
 ```ps -o user= -p [process name]```
 
-### Find the PID of the first child in the process/service
+#### Find the PID of the first child in the process/service
 ```pstree -p [process name/id]```
 
-### Set the process/service to run everytime the VM boots
+#### Set the process/service to run everytime the VM boots
 ```systemctl enable [process name]```
 
-### Find the number of processes running at boot
+#### Find the number of processes running at boot
 ```systemctl list-unit-files | grep 'enabled' | wc```
 
-### See the number of processes which are socket units
+#### See the number of processes which are socket units
 ```systemctl list-unit-files --type=socket | grep 'enabled' | wc```
 
-### Set the process so it doesn't run when the VM boots
+#### Set the process so it doesn't run when the VM boots
 ```systemctl disable [process name]```
 
 # Apache
-### remember others need execute priveledges on the directory
+#### remember others need execute priveledges on the directory
 
-### example virtual hosts named web and vm
-### vm has a rule to redirect host-2-161.linuxzoo.net to vm-2-...
-### unless in /~dave
+#### example virtual hosts named web and vm
+#### vm has a rule to redirect host-2-161.linuxzoo.net to vm-2-...
+#### unless in /~dave
 ```
 <VirtualHost *:80>
     ServerAdmin bob@gmail.com
