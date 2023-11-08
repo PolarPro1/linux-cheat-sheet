@@ -313,6 +313,32 @@ OR
 ```systemctl disable [process name]```
 
 # Apache
+
+#### Start the HTTP service
+```systemctl start httpd.service```
+
+#### Reload the HTTP service
+```systemctl reload httpd.service```
+
+#### Reset the firewall if previously changed
+```systemctl restart iptables.service```
+
+#### Enabling the feature to have the HTML being public from a user's home directory
+(the server will only show contents from this directory ```/home/dave/public_html/hello.html```)
+
+From ```/etc/httpd/conf.d/userdir.conf```
+
+The line ```UserDir disable``` needs to be commented and ```UserDir public_html``` needs to be uncommented
+
+By default SELinux is forbidden from reading any files in ```/home```
+
+Check this using ```getsebool httpd_read_user_content```
+
+If needed the SELinux can be chnaged to have access by:
+
+```setsebool -P httpd_read_user_content 1```
+
+
 - **remember others need execute priveledges on the directory**
 - **example virtual hosts named web and vm**
 - **vm has a rule to redirect host-2-161.linuxzoo.net to vm-2-...**
