@@ -15,6 +15,38 @@
 
 ```which (insert name of syslog daemon)``` - to get absolute path name
 
+```mkdir``` - create a directory
+
+```rmdir``` or ```rm``` - delete a directory or a file
+
+```cp``` - copy a file/directory
+
+```mv``` - move or rename files/directories
+
+```touch``` - create an empty file
+
+```nano``` - create and edit a file
+
+```chmod``` - change file permissions
+
+```chown``` - change file ownership
+
+```grep``` - search for a specified thing
+
+```ps``` - lists the running processes
+
+```kill``` - terminates a process
+
+```top``` or ```htop``` - monitor system and process activity
+
+```useradd``` - create a new user
+
+```passwd``` - change the user's password
+
+```userdel``` - delete a user
+
+```sudo``` - execute commands with superuser privilages
+
 
 
 ## Example Questions 
