@@ -313,11 +313,10 @@ OR
 ```systemctl disable [process name]```
 
 # Apache
-#### remember others need execute priveledges on the directory
-
-#### example virtual hosts named web and vm
-#### vm has a rule to redirect host-2-161.linuxzoo.net to vm-2-...
-#### unless in /~dave
+- **remember others need execute priveledges on the directory**
+- **example virtual hosts named web and vm**
+- **vm has a rule to redirect host-2-161.linuxzoo.net to vm-2-...**
+- **unless in /~dave**
 ```
 <VirtualHost *:80>
     ServerAdmin bob@gmail.com
