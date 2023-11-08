@@ -269,6 +269,8 @@ OR
 
 #### Find the major and the  minor number of the mapper device (in this case the soft link was used to find the numbers)
 ```ls -l /dev (look for the soft link associated with the mapper, here it is dm-0)```
+###example major = 253 minor = 0
+```brw-rw----. 1 root disk    253,   0 Nov  8 19:43 dm-0```
 
 #### Find how much swap space has been allocated on the computer from the '/proc' directory
 ```cat /proc/swaps (the size is in bytes)```
