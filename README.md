@@ -275,3 +275,36 @@ OR
 
 ### Set the process so it doesn't run when the VM boots
 ```systemctl disable [process name]```
+
+# Apache
+### remember others need execute priveledges on the directory
+
+### example virtual hosts named web and vm
+### vm has a rule to redirect host-2-161.linuxzoo.net to vm-2-...
+### unless in /~dave
+```
+<VirtualHost *:80>
+    ServerAdmin bob@gmail.com
+    DocumentRoot /home/dave/public_html/web
+    ServerName web-2-161.linuxzoo.net
+
+    ErrorLog logs/web-error_log
+    CustomLog logs/web-access_log common
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerAdmin bob@gmail.com
+    DocumentRoot /home/dave/public_html/vm
+    ServerName vm-2-161.linuxzoo.net
+    ServerAlias host-2-161.linuxzoo.net
+
+    ErrorLog logs/vm-error_log
+    CustomLog logs/vm-access_log common
+
+
+    RewriteEngine On
+    RewriteCond %{HTTP_HOST} ^host-2-161.linuxzoo.net [NC]
+    RewriteCond %{REQUEST_URI} !^/~dave
+    RewriteRule ^(.*)$ http://vm-2-161.linuxzoo.net$1 [L]
+</VirtualHost>
+```
