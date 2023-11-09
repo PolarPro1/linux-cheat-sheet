@@ -240,6 +240,8 @@ zone "1.16.172.in-addr.arpa" IN {
         file "/var/named/advanced.rev";
 };
 ```
+### DNS quiz answer
+![image](https://github.com/PolarPro1/linux-cheat-sheet/assets/123465424/d246ad6a-d809-4028-95cb-12351d8fd3e7)
 
 
 # ADMIN
