@@ -245,6 +245,8 @@ zone "1.16.172.in-addr.arpa" IN {
 ![image](https://github.com/PolarPro1/linux-cheat-sheet/assets/123465424/d246ad6a-d809-4028-95cb-12351d8fd3e7)
 
 
+![image](https://github.com/PolarPro1/linux-cheat-sheet/assets/123465424/10cf0c7b-0e60-4b1b-8b01-f2c2e01a2542)
+
 
 # ADMIN
 #### Get the number of partitions using block with 'sfdisk' command from a directory
