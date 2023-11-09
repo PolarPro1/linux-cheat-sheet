@@ -267,7 +267,7 @@ zone "1.16.172.in-addr.arpa" IN {
 OR
 <br>
 ```mount -l | grep 'centos_lvm-root'```
-#### example (answer is / )
+#### Example (answer is / )
 ```/dev/mapper/centos_lvm-root on / type xfs (rw,relatime,seclabel,attr2,inode64,noquota)```
 
 #### To find the block id for the mapper filesystem
@@ -275,19 +275,21 @@ OR
 
 #### Find the major and the  minor number of the mapper device (in this case the soft link was used to find the numbers)
 ```ls -l /dev (look for the soft link associated with the mapper, here it is dm-0)```
-#### example major = 253 minor = 0
 
+#### Example major = 253 minor = 0
 ```brw-rw----. 1 root disk    253,   0 Nov  8 19:43 dm-0```
 
 #### Find how much swap space has been allocated on the computer from the '/proc' directory
 ```cat /proc/swaps (the size is in bytes)```
 
-#### find all id's of processes
+#### Find all id's of processes
 ```ps aux```
-#### to then find a specific you can pipe output into a grep
-#### example output answer is 1003
+
+#### To then find a specific you can pipe output into a grep
+#### Example output answer is 1003
 ```root      1003  0.0  0.7 215680  3644 ?        Ssl  19:43   0:00 /usr/sbin/rsyslogd -n```
-###or
+
+#### OR
 #### Find the process id of a process
 ```ps -C [process name]```
 
@@ -296,11 +298,12 @@ OR
 
 #### Find the full path to the systemd config file which controls a service (in this case rsyslog)
 ```systemctl show [process name] (look for FragmentPath)```
+
 #### or use this which Douglas thinks is better
 ```systemctl status [proccess name]```
-#### example answer /usr/lib/systemd/system/rsyslog.service
-```Loaded: loaded (/usr/lib/systemd/system/rsyslog.service; enabled; vendor preset: enabled)```
 
+#### Example answer /usr/lib/systemd/system/rsyslog.service
+```Loaded: loaded (/usr/lib/systemd/system/rsyslog.service; enabled; vendor preset: enabled)```
 
 #### Find the line that configures the environmental variables of a process (in this case rsyslog)
 ```systemctl show [process name] | grep 'EnvironmentFile'```
