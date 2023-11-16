@@ -392,3 +392,7 @@ If needed the SELinux can be chnaged to have access by:
     RewriteRule ^(.*)$ http://vm-2-161.linuxzoo.net$1 [L]
 </VirtualHost>
 ```
+
+
+# APACHE 2
+#### 
